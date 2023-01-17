@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "board.hh"
+#include "solver.hh"
 
 using namespace std;
-
 
 
 
@@ -12,6 +12,11 @@ using namespace std;
 int main(int argc, char **argv)
 {
     
-    board toto(argv[1]);
+    Board toto(argv[1]);
     toto.printer();
+    Solver test(toto);
+    if(test.is_solved())
+        cout << "board is solved" << endl;
+    else
+        cout << "board is not solved" << endl;
 }

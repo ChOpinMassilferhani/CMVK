@@ -8,10 +8,12 @@
 
 using namespace std;
 
-class piece
+class Piece
 {
     public:
-        piece(char nord, char ouest, char sud, char est, bool fixed);
+        Piece(char nord, char ouest, char sud, char est, bool fixed);
+        ~Piece() = default;
+
         int nord;
         int ouest;
         int sud;
@@ -21,16 +23,17 @@ class piece
         void rotate();
 };
 
-class board
+class Board
 {
     public:
-        board(string input_file);
-        ~board() = default;
+        Board(string input_file);
+        Board() = default;
+        ~Board() = default;
 
         void printer();
+        void output();
 
-
-        vector<vector<piece>> pieces;
+        vector<vector<Piece>> pieces;
         int size;
     private:
 

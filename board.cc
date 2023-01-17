@@ -3,7 +3,7 @@
 #include <vector>
 
 
-board::board(string input_file)
+Board::Board(string input_file)
 {
     int pos;
     while(input_file[pos] != 's')
@@ -15,10 +15,10 @@ board::board(string input_file)
     string line;
     ifstream myfile (input_file);
 
-    this->pieces = vector<vector<piece>>();
+    this->pieces = vector<vector<Piece>>();
     for (size_t i = 0; i < size; i++)
     {
-        vector<piece> linep;
+        vector<Piece> linep;
 
         for (size_t j = 0; j < size; j++)
         {
@@ -27,7 +27,7 @@ board::board(string input_file)
             while (k < line.size() && line[k] != '@')
                 k++;
             
-            piece p(line[0], line[1], line[2], line[3], k < line.size());
+            Piece p(line[0], line[1], line[2], line[3], k < line.size());
             linep.push_back(p);
         }
         this->pieces.push_back(linep);
@@ -38,7 +38,8 @@ board::board(string input_file)
     myfile.close();
 }
 
-void board::printer()
+
+void Board::printer()
 {
     string sol("+-----");
     for (size_t i = 0; i < this->size; i++)
@@ -73,7 +74,7 @@ void board::printer()
     
 }
 
-piece::piece(char nord, char ouest, char sud, char est, bool fixed)
+Piece::Piece(char nord, char ouest, char sud, char est, bool fixed)
 {
     this->nord = stoi(&nord);
     this->ouest = stoi(&ouest);
@@ -82,7 +83,7 @@ piece::piece(char nord, char ouest, char sud, char est, bool fixed)
     this->fixed = fixed;
 }
 
-void piece::rotate()
+void Piece::rotate()
 {
     int tmp = this->nord;
     this->nord = this->est;
