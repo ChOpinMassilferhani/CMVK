@@ -1,6 +1,7 @@
 #pragma once
 
 #include "board.hh"
+#include <random>
 
 class Solver
 {
@@ -9,7 +10,15 @@ class Solver
 
         Board curr_b;
 
-        bool is_solved();
+        int get_U();
 
-        bool good_piece(int i, int j);
+        int good_piece(int i, int j);
+
+        int solve(int max_iterations);
+
+        bool sample(double delta_U, double T);
+
+        random_device rd;  
+	    mt19937 gen; 
+	    uniform_real_distribution<double>  dist;
 };

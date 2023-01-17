@@ -74,7 +74,7 @@ void Board::printer()
     
 }
 
-Piece::Piece(char nord, char ouest, char sud, char est, bool fixed)
+Piece::Piece(char nord, char ouest, char est, char sud, bool fixed)
 {
     this->nord = stoi(&nord);
     this->ouest = stoi(&ouest);
