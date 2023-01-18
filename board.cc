@@ -12,6 +12,7 @@ Board::Board(string input_file)
 
     this->size = stoi(&s);
 
+
     string line;
 
     ifstream myfile (input_file);

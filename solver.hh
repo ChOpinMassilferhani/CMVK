@@ -21,4 +21,6 @@ class Solver
         random_device rd;  
 	    mt19937 gen; 
 	    uniform_real_distribution<double>  dist;
+
+    void swap(size_t p1, size_t p2);
 };

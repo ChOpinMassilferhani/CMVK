@@ -17,8 +17,7 @@ int main(int argc, char **argv)
     toto.printer();
     Solver test(toto);
 
-    test.solve(1000000);
-    test.curr_b.pieces[1][0].rotate();
+    test.solve(50000000);
     test.curr_b.printer();
     int U = test.get_U();
     if(U)

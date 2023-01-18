@@ -42,91 +42,76 @@ bool Solver::sample(double delta_U, double T) {
 
 int Solver::solve(int max_iterations) {
 
-    int n = curr_b.size * curr_b.size;
+    size_t n = curr_b.size * curr_b.size;
 
     int iterations = 0;
     double U1 = get_U();
     //cout << U1 << endl;
-    while (U1 != 0) {
+    while (U1 != 0 && iterations < max_iterations) {
         //cout << U1 << endl;
         // 1- Choose two different random axes
 
-        int i1, i2, swap, a1, ia1, a2, ia2, rot = 0;
-        swap = rand() % 2;
-
+        int i1, i2 = 0;
         i1 = rand() % n;
-        while (this->curr_b.pieces[i1 / n][i1 % n].fixed)
+        while (this->curr_b.pieces[i1 / curr_b.size][i1 % curr_b.size].fixed)
             i1 = rand() % n;
 
         i2 = rand() % n;
-        while (i2 == i1 || this->curr_b.pieces[i2 / n][i2 % n].fixed)
+        while (i2 == i1 || this->curr_b.pieces[i2 / curr_b.size][i2 % curr_b.size].fixed)
             i2 = rand() % n;
 
-        // 2- swap axis
-        if (swap)
-            std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
-                           this->curr_b.pieces[i2 / n].begin() + (i2 % n));
-        else {
-            rot = rand() % 2;
-            if (rot) {
-                a1 = rand() % 4;
-                ia1 = 4 - a1;
-                while (a1) {
-                    this->curr_b.pieces[i1 / n][i1 % n].rotate();
-                    a1--;
-                }
-            } else {
-                a2 = rand() % 4;
-                ia2 = 4 - a2;
-                while (a2) {
-                    this->curr_b.pieces[i2 / n][i2 % n].rotate();
-                    a2--;
-                }
-            }
-        }
-
+        this->swap(i1, i2);
+        //std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
+         //              this->curr_b.pieces[i2 / n].begin() + (i2 % n));
 
         // 3- delta_u
         double U2 = get_U();
-        double delta_U = U2 - U1;
 
         if (U2 <= U1) // 4- choose candidate
         {
             //fait rien
         } else // choose candidate based on transition proba
         {
-            float ratio = exp(U2 - U1);
+            float ratio = exp(U1 - U2);
             if (ratio <= dist(gen)) {
                 //fait rien
             } else {
 
                 //revient avant
-                if (swap)
-                    std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
-                                   this->curr_b.pieces[i2 / n].begin() + (i2 % n));
-                else {
-                    //cout << "in" << endl;
-                    if (rot) {
-                        while (ia1) {
-                            this->curr_b.pieces[i1 / n][i1 % n].rotate();
-                            ia1--;
-                        }
-                    } else {
-                        while (ia2) {
-                            this->curr_b.pieces[i2 / n][i2 % n].rotate();
-                            ia2--;
-                        }
-                    }
-                }
+            //    std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
+             //                  this->curr_b.pieces[i2 / n].begin() + (i2 % n));
+                this->swap(i1, i2);
             }
         }
-
-        if (max_iterations == iterations)
-            break;
 
         U1 = get_U();
         iterations++;
 
     }
     return iterations;
+}
+
+void Solver::swap(size_t p1, size_t p2) {
+    size_t i1 = p1 / this->curr_b.size;
+    size_t j1 = p1 % this->curr_b.size;
+    size_t i2 = p2 / this->curr_b.size;
+    size_t j2 = p2 % this->curr_b.size;
+
+    int tmp = this->curr_b.pieces[i1][j1].nord;
+    this->curr_b.pieces[i1][j1].nord = this->curr_b.pieces[i2][j2].nord;
+    this->curr_b.pieces[i2][j2].nord = tmp;
+
+    tmp = this->curr_b.pieces[i1][j1].sud;
+    this->curr_b.pieces[i1][j1].sud = this->curr_b.pieces[i2][j2].sud;
+    this->curr_b.pieces[i2][j2].sud = tmp;
+
+    tmp = this->curr_b.pieces[i1][j1].est;
+    this->curr_b.pieces[i1][j1].est = this->curr_b.pieces[i2][j2].est;
+    this->curr_b.pieces[i2][j2].est = tmp;
+
+    tmp = this->curr_b.pieces[i1][j1].ouest;
+    this->curr_b.pieces[i1][j1].ouest = this->curr_b.pieces[i2][j2].ouest;
+    this->curr_b.pieces[i2][j2].ouest = tmp;
+
+
 }

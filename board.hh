@@ -31,10 +31,9 @@ class Board
         ~Board() = default;
 
         void printer();
-        void output();
 
         vector<vector<Piece>> pieces;
-        int size;
+        size_t size;
     private:
 
 };
