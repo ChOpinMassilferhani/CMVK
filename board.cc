@@ -5,7 +5,7 @@
 
 Board::Board(string input_file)
 {
-    int pos;
+    int pos = 0;
     while(input_file[pos] != 's')
         pos++;
     char s = input_file[pos + 1];
@@ -13,7 +13,14 @@ Board::Board(string input_file)
     this->size = stoi(&s);
 
     string line;
+
     ifstream myfile (input_file);
+    //Check if file exists
+
+    if (!myfile.is_open()) {
+        cout << "Unable to open file";
+        exit(1); // terminate with error
+    }
 
     this->pieces = vector<vector<Piece>>();
     for (size_t i = 0; i < size; i++)
