@@ -48,7 +48,8 @@ int Solver::solve(int max_iterations) {
     double U1 = get_U();
     //cout << U1 << endl;
     while (U1 != 0 && iterations < max_iterations) {
-        //cout << U1 << endl;
+        if (iterations % 1000000 == 0)
+            cout << "iteration " << iterations << " U = " << U1 << endl;
         // 1- Choose two different random axes
 
         int i1, i2 = 0;
@@ -61,25 +62,15 @@ int Solver::solve(int max_iterations) {
             i2 = rand() % n;
 
         this->swap(i1, i2);
-        //std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
-         //              this->curr_b.pieces[i2 / n].begin() + (i2 % n));
-
         // 3- delta_u
         double U2 = get_U();
 
-        if (U2 <= U1) // 4- choose candidate
-        {
-            //fait rien
-        } else // choose candidate based on transition proba
+        if (U2 > U1) // 4- choose candidate
         {
             float ratio = exp(U1 - U2);
-            if (ratio <= dist(gen)) {
-                //fait rien
-            } else {
-
+            float tmp = dist(this->gen);
+            if (ratio < tmp) {
                 //revient avant
-            //    std::iter_swap(this->curr_b.pieces[i1 / n].begin() + (i1 % n),
-             //                  this->curr_b.pieces[i2 / n].begin() + (i2 % n));
                 this->swap(i1, i2);
             }
         }

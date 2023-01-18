@@ -9,8 +9,8 @@ Board::Board(string input_file)
     while(input_file[pos] != 's')
         pos++;
     char s = input_file[pos + 1];
+    this->size = stoi(string(1, s));
 
-    this->size = stoi(&s);
 
 
     string line;
@@ -34,7 +34,6 @@ Board::Board(string input_file)
             int k = 0;
             while (k < line.size() && line[k] != '@')
                 k++;
-            
             Piece p(line[0], line[1], line[2], line[3], k < line.size());
             linep.push_back(p);
         }
