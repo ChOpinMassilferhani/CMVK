@@ -13,18 +13,20 @@ int main(int argc, char **argv)
     {
         cout << "Usage: " << argv[0] << " <board file>" << endl;
         return 1;
-    }
-    clock_t stop = clock();
-    Board toto(argv[1]);
-    toto.printer();
-    Solver test(toto);
+    } //loop argv
 
-    test.solve(600000000);
-    test.curr_b.printer();
-    int U = test.get_U();
-    if(U)
-        cout << "board is not solved " << U << endl;
-    else
-        cout << "board is solved " << U << endl;
-    cout << "time : " << (clock() - stop) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
+    clock_t begin = clock();
+    for (int i = 1; i < argc; i++)
+    {
+        Board b(argv[i]);
+        Solver s(b);
+        s.solve(10000000);
+        //b.printer();
+
+    }
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+    cout << "Time elapsed: " << elapsed_secs << "s for "<< argc -1  << " board" <<endl;
+
 }

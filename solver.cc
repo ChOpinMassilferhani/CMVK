@@ -48,7 +48,7 @@ int Solver::solve(int max_iterations) {
     double U1 = get_U();
     //cout << U1 << endl;
     while (U1 != 0 && iterations < max_iterations) {
-        if (iterations % 1000000 == 0)
+        if (iterations % 1000000 == -1)
             cout << "iteration " << iterations << " U = " << U1 << endl;
         // 1- Choose two different random axes
 
