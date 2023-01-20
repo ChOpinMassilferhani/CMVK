@@ -55,8 +55,6 @@ double Solver::init_T()
 		int uniform = 0;
 		int nb_samples = 100;
 
-		// check if uniform distribution
-		// sample m times and check if transition proba is near 1
 		for (int i = 0; i < nb_samples; ++i)
 		{
 			double eps_prob = 0.01;
@@ -73,7 +71,7 @@ double Solver::init_T()
 
 			this->swap(i1, i2);
 			int U2 = get_U();
-			if (exp(- abs(U2 - U1) / T) > 1 - eps_prob)
+			if (exp( abs(U2 - U1) / T) > 1 - eps_prob)
 				uniform += 1;
 		}
 
@@ -83,7 +81,6 @@ double Solver::init_T()
 			T1 = T;
 	}
 
-	//std::cout << "Initial T: " << T << std::endl;
 	return T;
 
 }
