@@ -92,7 +92,7 @@ bool Solver::solve(int max_iterations) {
 	size_t n = curr_b.size * curr_b.size;
 
 	double min_T = 0.5;
-	double lambda = 0.999;
+	double lambda = 0.99;
 	int iterations = 0;
 	double T = init_T();
 
@@ -100,7 +100,7 @@ bool Solver::solve(int max_iterations) {
 	//cout << U1 << endl;
 	while (U1 != 0 && iterations < max_iterations) {
 		//if (iterations % 1000000 == 0)
-		//   cout << "iteration " << iterations << " U = " << U1 << endl;
+		//   cout << "iteration " << iterations << " U = " << U1 << " T = "<< T << endl;
 		// 1- Choose two different random axes
 
 		int i1, i2 = 0;

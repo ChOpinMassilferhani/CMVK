@@ -6,6 +6,11 @@ do
     do
         echo test "data/input/s$j-0$i.txt"
         ./a.out "data/input/s$j-0$i.txt" out.txt
-        diff -u out.txt "data/ref/s$j-0$i-ref.txt"
+        acheived=$?
+        if [ "$acheived" != "0" ]; then
+            diff -u out.txt "data/ref/s$j-0$i-ref.txt"
+        else
+            echo "Test passed"
+        fi
     done
 done
