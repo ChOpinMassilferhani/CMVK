@@ -89,19 +89,22 @@ void Board::write(char *string) {
 		for (size_t j = 0; j < this->size; j++)
 		{
 			myfile << this->pieces[i][j].nord << this->pieces[i][j].ouest << this->pieces[i][j].est << this->pieces[i][j].sud;
-			if (this->pieces[i][j].fixed)
-				myfile << "@";
 			myfile << endl;
 		}
 	}
 	myfile.close();
 }
 
+int ctoi(char c)
+{
+    return c - '0';
+}
+
 Piece::Piece(char nord, char ouest, char est, char sud, bool fixed)
 {
-    this->nord = stoi(&nord);
-    this->ouest = stoi(&ouest);
-    this->sud = stoi(&sud);
-    this->est = stoi(&est);
+    this->nord = ctoi(nord);
+    this->ouest = ctoi(ouest);
+    this->sud = ctoi(sud);
+    this->est = ctoi(est);
     this->fixed = fixed;
 }

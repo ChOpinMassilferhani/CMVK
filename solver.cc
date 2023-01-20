@@ -35,9 +35,7 @@ int Solver::get_U() {
 bool Solver::sample(double delta_U, double T) {
 	double p = exp(-delta_U / T);
 	double tmp = this->dist(this->gen);
-	if (p < tmp)
-		return true;
-	return false;
+	return  p < tmp;
 }
 double Solver::init_T()
 {
@@ -84,7 +82,7 @@ double Solver::init_T()
 			T1 = T;
 	}
 
-	std::cout << "Initial T: " << T << std::endl;
+	//std::cout << "Initial T: " << T << std::endl;
 	return T;
 
 }
@@ -128,10 +126,13 @@ bool Solver::solve(int max_iterations) {
 			}
 		}
 
-		if (T > min_T)
-			T *= lambda;
-		else
-			T = min_T;
+		if(U2 < U1)
+		{
+			if (T > min_T)
+				T *= lambda;
+			else
+				T = min_T;
+		}
 		U1 = get_U();
 		iterations++;
 
