@@ -1,6 +1,7 @@
 #include "solver.hh"
 #include "board.hh"
 
+#define DEBUG 0
 Solver::Solver(Board &b) {
 	curr_b = b;
 	std::random_device rd;
@@ -91,7 +92,7 @@ bool Solver::solve(int max_iterations) {
 
 	size_t n = curr_b.size * curr_b.size;
 
-	double min_T = 0.5;
+	double min_T = 0.4;
 	double lambda = 0.99;
 	int iterations = 0;
 	double T = init_T();
@@ -99,8 +100,10 @@ bool Solver::solve(int max_iterations) {
 	double U1 = get_U();
 	//cout << U1 << endl;
 	while (U1 != 0 && iterations < max_iterations) {
-		//if (iterations % 1000000 == 0)
-		//   cout << "iteration " << iterations << " U = " << U1 << " T = "<< T << endl;
+#if DEBUG
+		if (iterations % 1000000 == 0)
+		   cout << "iteration " << iterations << " U = " << U1 << " T = "<< T << endl;
+#endif
 		// 1- Choose two different random axes
 
 		int i1, i2 = 0;

@@ -10,3 +10,6 @@ debug:
 
 clean:
 	$(RM) *.out
+
+test: all
+	bash test.sh
