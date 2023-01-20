@@ -93,7 +93,7 @@ bool Solver::solve(int max_iterations) {
 	size_t n = curr_b.size * curr_b.size;
 
 	double min_T = 0.4;
-	double lambda = 0.999;
+	double lambda = 0.99;
 	int iterations = 0;
 	double T = init_T();
 
