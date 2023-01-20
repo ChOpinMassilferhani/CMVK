@@ -39,15 +39,65 @@ bool Solver::sample(double delta_U, double T) {
 		return true;
 	return false;
 }
+double Solver::init_T()
+{
+	double T1 = 0;
+	double T2 = 1000000;
+	double T = T2;
 
-int Solver::solve(int max_iterations) {
+	size_t n = curr_b.size * curr_b.size;
+
+	double eps_T = 1;
+
+	while ((T2 - T1) > eps_T)
+	{
+		T = T1 + (T2 - T1) / 2;
+
+		int uniform = 0;
+		int nb_samples = 100;
+
+		// check if uniform distribution
+		// sample m times and check if transition proba is near 1
+		for (int i = 0; i < nb_samples; ++i)
+		{
+			double eps_prob = 0.01;
+
+			int U1 = this->get_U();
+			int i1, i2 = 0;
+			i1 = rand() % n;
+			while (this->curr_b.pieces[i1 / curr_b.size][i1 % curr_b.size].fixed)
+				i1 = rand() % n;
+
+			i2 = rand() % n;
+			while (i2 == i1 || this->curr_b.pieces[i2 / curr_b.size][i2 % curr_b.size].fixed)
+				i2 = rand() % n;
+
+			this->swap(i1, i2);
+			int U2 = get_U();
+			if (exp(- abs(U2 - U1) / T) > 1 - eps_prob)
+				uniform += 1;
+		}
+
+		if (uniform >= 0.98 * nb_samples)
+			T2 = T;
+		else
+			T1 = T;
+	}
+
+	std::cout << "Initial T: " << T << std::endl;
+	return T;
+
+}
+
+bool Solver::solve(int max_iterations) {
 
 	size_t n = curr_b.size * curr_b.size;
 
 	double min_T = 0.5;
-	double lambda = 0.99;
+	double lambda = 0.999;
 	int iterations = 0;
-	double T = 666;
+	double T = init_T();
+
 	double U1 = get_U();
 	//cout << U1 << endl;
 	while (U1 != 0 && iterations < max_iterations) {
@@ -86,7 +136,7 @@ int Solver::solve(int max_iterations) {
 		iterations++;
 
 	}
-	return iterations;
+	return U1 == 0;
 }
 
 void Solver::swap(size_t p1, size_t p2) {
@@ -95,5 +145,10 @@ void Solver::swap(size_t p1, size_t p2) {
 	size_t i2 = p2 / this->curr_b.size;
 	size_t j2 = p2 % this->curr_b.size;
 	std::iter_swap(this->curr_b.pieces[i1].begin() + j1, this->curr_b.pieces[i2].begin() + j2);
+
+}
+
+void Solver::write(char *path) {
+	this->curr_b.write(path);
 
 }

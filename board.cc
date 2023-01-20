@@ -81,6 +81,22 @@ void Board::printer()
     
 }
 
+void Board::write(char *string) {
+	ofstream myfile;
+	myfile.open(string);
+	for (size_t i = 0; i < this->size; i++)
+	{
+		for (size_t j = 0; j < this->size; j++)
+		{
+			myfile << this->pieces[i][j].nord << this->pieces[i][j].ouest << this->pieces[i][j].est << this->pieces[i][j].sud;
+			if (this->pieces[i][j].fixed)
+				myfile << "@";
+			myfile << endl;
+		}
+	}
+	myfile.close();
+}
+
 Piece::Piece(char nord, char ouest, char est, char sud, bool fixed)
 {
     this->nord = stoi(&nord);
@@ -88,13 +104,4 @@ Piece::Piece(char nord, char ouest, char est, char sud, bool fixed)
     this->sud = stoi(&sud);
     this->est = stoi(&est);
     this->fixed = fixed;
-}
-
-void Piece::rotate()
-{
-    int tmp = this->nord;
-    this->nord = this->est;
-    this->est = this->sud;
-    this->sud = this->ouest;
-    this->ouest = tmp;
 }

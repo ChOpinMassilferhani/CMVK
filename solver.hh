@@ -14,7 +14,7 @@ class Solver
 
         int good_piece(int i, int j);
 
-        int solve(int max_iterations);
+        bool solve(int max_iterations);
 
         bool sample(double delta_U, double T);
 
@@ -23,4 +23,8 @@ class Solver
 	    uniform_real_distribution<double>  dist;
 
     void swap(size_t p1, size_t p2);
+
+	void write(char *path);
+
+	double init_T();
 };

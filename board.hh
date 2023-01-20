@@ -20,7 +20,6 @@ class Piece
         int est;
         bool fixed;
 
-        void rotate();
 };
 
 class Board
@@ -34,6 +33,7 @@ class Board
 
         vector<vector<Piece>> pieces;
         size_t size;
-    private:
+
+	void write(char *string);
 
 };
