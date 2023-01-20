@@ -16,11 +16,11 @@ class Solver
 
         bool solve(int max_iterations);
 
-        bool sample(double delta_U, double T);
+        bool candidate(double delta_U, double T);
 
         random_device rd;  
 	    mt19937 gen; 
-	    uniform_real_distribution<double>  dist;
+	    uniform_real_distribution<double> dist;
 
     void swap(size_t p1, size_t p2);
 

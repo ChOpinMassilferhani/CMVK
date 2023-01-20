@@ -16,11 +16,10 @@ Board::Board(string input_file)
     string line;
 
     ifstream myfile (input_file);
-    //Check if file exists
 
     if (!myfile.is_open()) {
         cout << "Unable to open file";
-        exit(1); // terminate with error
+        exit(1);
     }
 
     this->pieces = vector<vector<Piece>>();
@@ -37,9 +36,7 @@ Board::Board(string input_file)
             Piece p(line[0], line[1], line[2], line[3], k < line.size());
             linep.push_back(p);
         }
-        this->pieces.push_back(linep);
-        
-        
+        this->pieces.push_back(linep);   
     }
 
     myfile.close();

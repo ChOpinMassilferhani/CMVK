@@ -2,13 +2,14 @@
 #include "board.hh"
 
 #define DEBUG 0
+
+
 Solver::Solver(Board &b) {
 	curr_b = b;
 	std::random_device rd;
 	this->gen = std::mt19937(rd());
 	this->dist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
-
 
 int Solver::good_piece(int i, int j) {
 	int U = 0;
@@ -33,11 +34,13 @@ int Solver::get_U() {
 
 }
 
-bool Solver::sample(double delta_U, double T) {
+bool Solver::candidate(double delta_U, double T) {
 	double p = exp(-delta_U / T);
 	double tmp = this->dist(this->gen);
 	return  p < tmp;
 }
+
+
 double Solver::init_T()
 {
 	double T1 = 0;
@@ -90,18 +93,18 @@ bool Solver::solve(int max_iterations) {
 	size_t n = curr_b.size * curr_b.size;
 
 	double min_T = 0.4;
-	double lambda = 0.99;
+	double lambda = 0.999;
 	int iterations = 0;
 	double T = init_T();
 
 	double U1 = get_U();
-	//cout << U1 << endl;
+
 	while (U1 != 0 && iterations < max_iterations) {
+
 #if DEBUG
 		if (iterations % 1000000 == 0)
 		   cout << "iteration " << iterations << " U = " << U1 << " T = "<< T << endl;
 #endif
-		// 1- Choose two different random axes
 
 		int i1, i2 = 0;
 		i1 = rand() % n;
@@ -113,26 +116,17 @@ bool Solver::solve(int max_iterations) {
 			i2 = rand() % n;
 
 		this->swap(i1, i2);
-		// 3- delta_u
+
 		double U2 = get_U();
 
-		if (U2 > U1) // 4- choose candidate
-		{
-			//float ratio = exp(U1 - U2);
-			//float tmp = dist(this->gen);
-			if (sample(U2 - U1, T)) {
-				//revient avant
+		if (U2 > U1 && candidate(U2 - U1, T))
 				this->swap(i1, i2);
-			}
-		}
 
-		if(U2 < U1)
-		{
-			if (T > min_T)
-				T *= lambda;
-			else
-				T = min_T;
-		}
+		if (T > min_T)
+			T *= lambda;
+		else
+			T = min_T;
+
 		U1 = get_U();
 		iterations++;
 
@@ -146,10 +140,8 @@ void Solver::swap(size_t p1, size_t p2) {
 	size_t i2 = p2 / this->curr_b.size;
 	size_t j2 = p2 % this->curr_b.size;
 	std::iter_swap(this->curr_b.pieces[i1].begin() + j1, this->curr_b.pieces[i2].begin() + j2);
-
 }
 
 void Solver::write(char *path) {
 	this->curr_b.write(path);
-
 }
